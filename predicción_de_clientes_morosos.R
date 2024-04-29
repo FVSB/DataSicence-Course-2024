@@ -454,6 +454,7 @@ printcp(Gini_tree.fit.without_prune)
 ##################################################
 ##################################################
 test_table$Depndt <- as.factor(test_table$Depndt)
+print(test_table$Depndt)
 predict_TestTable.tree <-predict(Gini_tree.fit.without_prune, type='prob', test_table)
 
 # devuelve la probabilidad asociada a cada clase
@@ -463,6 +464,7 @@ predict_TestTable.tree <-predict(Gini_tree.fit.without_prune, type='prob', test_
 predict_TestAuxTable.tree <- prediction(predict_TestTable.tree[, 2], test_table$default)
 
 RocTest.tree <- performance(predict_TestAuxTable.tree, "tpr", "fpr")
+
 plot(RocTest.tree, main="Curva ROC", colorize=TRUE)
 
 # L?nea base
@@ -471,7 +473,7 @@ abline(a=0,b=1,col="black")
 auc_ROC<-performance(predict_TestAuxTable.tree, "auc")
 auc_ROC@y.values[[1]]
 
-# AUC = 0.8038979 > 0.664712 (Regresi?n es la mejor opcion)
+# AUC = 0.796999 > 0.653521 (La regresion es la mejor opcion a elegir)
 
 # Otros gr?ficos
 
@@ -507,6 +509,8 @@ abline(a=1,b=0,col="black")
 # Si digo "-" y era 1 (pierdo una baja), mayor coste
 # Si digo "+" y era 0 (hago una campa?a inncesaria), menor coste
 # NOTA: Loss matrix must have zero on diagonals
+# Cargar el paquete rpart
+library(rpart)
 
 loss_matrix <- matrix(c(0, 360, 10, 0), byrow = TRUE, nrow = 2)
 arbolGini_Cost.fit <- rpart(default~Avgexp+Age+Income+Inc_per+Active+Cur_add+Ownrent+Selfempl+Depndt+Major,
@@ -516,6 +520,9 @@ arbolGini_Cost.fit <- rpart(default~Avgexp+Age+Income+Inc_per+Active+Cur_add+Own
 graphics.off()
 fancyRpartPlot(arbolGini_Cost.fit,caption=NULL,palettes=c("Purples"))
 
+# Asegurarse de que 'Depndt' sea un factor en test_table
+test_table$Depndt <- as.factor(test_table$Depndt)
+
 # Los cortes han cambiado
 
 predict_TestTable.tree <-predict(arbolGini_Cost.fit, type='prob', test_table)
@@ -523,6 +530,12 @@ predict_TestTable.tree <-predict(arbolGini_Cost.fit, type='prob', test_table)
 # devuelve la probabilidad asociada a cada clase
 
 # Adjuntamos a la predicci?n el dato real para contruir la curva ROC
+
+# Instalar el paquete ROCR si aún no lo has hecho
+install.packages("ROCR")
+
+# Cargar el paquete ROCR
+library(ROCR)
 
 predict_TestAuxTable.tree <- prediction(predict_TestTable.tree[, 2], test_table$default)
 
@@ -589,7 +602,7 @@ predict_AuxTable.randomForest <- prediction(predict_TestTable.randomForest[, 2],
 auc_ROC<-performance(predict_AuxTable.randomForest, "auc")
 auc_ROC@y.values[[1]]
 
-# 0.8038979 > 0.625733
+# 0.796999 > 0.625733
 
 #########################
 # 4.6 Gradient Boosting #
@@ -599,7 +612,7 @@ auc_ROC@y.values[[1]]
 install.packages("lubridate")
 install.packages("caret")
 library(caret)
-
+library(lattice)
 trainProportion <- 0.7
 trainIndexes <- createDataPartition(1:nrow(train_table), 1, trainProportion, list = FALSE)
 
@@ -672,7 +685,7 @@ predictTestAux.xgb <- prediction(predictTest.xgb[,1], test_table$default)
 auc_ROC<-performance(predictTestAux.xgb, "auc")
 auc_ROC@y.values[[1]]
 
-# 0.8038979 > 0.615902 (Regresion continua arrojando mejores resultados)
+# 0.796999 > 0.6481545 (Regresion continua arrojando mejores resultados)
 # Aun probando con varios valores con cada uno de los hiperparametros uno de los
-# resultados mas decentes fue 0.615902
+# mejores resultados fue de  0.6481545
 
