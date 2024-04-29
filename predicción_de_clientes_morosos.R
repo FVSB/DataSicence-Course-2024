@@ -31,7 +31,7 @@ print(test_table)
 
 summary(train_table)
 
-install.packages("moments")
+##install.packages("moments")
 library(moments)
 
 # Para usar las funciones de asimetría y curtosis
@@ -133,11 +133,11 @@ correlationMatrix<-cor(train_table[, c("Avgexp", "Age", "Income", "Inc_per")], m
 
 graphics.off()
 
-install.packages("corrplot")
+#install.packages("corrplot")
 library(corrplot)
-install.packages("dplyr")
+#install.packages("dplyr")
 library(dplyr)
-install.packages("ggcorrplot")
+#install.packages("ggcorrplot")
 library(ggcorrplot)
 
 
@@ -204,7 +204,7 @@ undersampling <- function(data, objective_var, ones_proportion_wish){
   `0sstable` <- subset(data, objective_var==0)
   zeros <- sample(nrow(`0sstable`), `0s_counts`, replace = FALSE)
   
-  return(rbind(data[variableObjetivo==1,], `0sstable`[ceros,]))
+  return(rbind(data[objective_var==1,], `0sstable`[zeros,]))
 }
 
 undersampling_0.5 <- undersampling(train_table, train_table$default, 1/2)
@@ -310,7 +310,7 @@ modelo.regresionLogistica.stepwise
 # para validar si son significativos y responden a
 # la l?gica de negocio esperada
 
-# install.packages("lmtest")
+# #install.packages("lmtest")
 library(lmtest)
 
 # Adem?s de las estimaciones, queremos ver su significatividad (p-valores)
@@ -331,10 +331,10 @@ predictTest.logisticaStepwise <- predict(modelo.regresionLogistica.stepwise,
 
 # Se comparan los modelos ajustados en t?rminos de curva ROC
 
-install.packages("gplots")
+#install.packages("gplots")
 library(gplots)
 
-install.packages("ROCR")
+#install.packages("ROCR")
 library(ROCR)
 
 # Adjuntamos a la predicci?n el dato real para contruir la curva ROC
@@ -386,7 +386,7 @@ abline(a=1,b=0,col="black")
 # Basados en test de dependencia #
 ##################################
 
-install.packages("partykit")
+#install.packages("partykit")
 library(partykit)
 
 `dependencies tree.fit` <- ctree(default~Avgexp+Age+Income+Inc_per+Active+Cur_add+Ownrent+Selfempl+Depndt+Major,
@@ -404,7 +404,7 @@ plot(`dependencies tree.fit`)
 # Basados en m?tricas de incertidumbre #
 ########################################
 
-install.packages("rpart")
+#install.packages("rpart")
 library(rpart)
 
 Gini_tree.fit <- rpart(default~Avgexp+Age+Income+Inc_per+Active+Cur_add+Ownrent+Selfempl+Depndt+Major,
@@ -432,14 +432,14 @@ Gini_tree.fit.without_prune <- rpart(default~Avgexp+Age+Income+Inc_per+Active+Cu
                                      parms = list(split = "gini"), control= rpart.control(minbucket = 30, maxdepth = 3, cp=-1))
 Gini_tree.fit.without_prune
 
-install.packages("rattle")
+#install.packages("rattle")
 library(rattle)
 
-install.packages("rpart.plot")
+#install.packages("rpart.plot")
 library(rpart.plot)
 
-install.packages("RColorBrewer")
-install.packages("ggcorrplot")
+#install.packages("RColorBrewer")
+#install.packages("ggcorrplot")
 library(RColorBrewer)
 # Dibujamos el ?rbol
 
@@ -532,7 +532,7 @@ predict_TestTable.tree <-predict(arbolGini_Cost.fit, type='prob', test_table)
 # Adjuntamos a la predicci?n el dato real para contruir la curva ROC
 
 # Instalar el paquete ROCR si aún no lo has hecho
-install.packages("ROCR")
+#install.packages("ROCR")
 
 # Cargar el paquete ROCR
 library(ROCR)
@@ -578,7 +578,7 @@ abline(a=1,b=0,col="black")
 # 4.5 Random Forest #
 #####################
 
-install.packages('randomForest')
+#install.packages('randomForest')
 library(randomForest)
 
 # Nota: El Random Forest, no funciona con missings.
@@ -609,8 +609,8 @@ auc_ROC@y.values[[1]]
 #########################
 
 # En este caso, vamos a contemplar una tabla de validaci?n
-install.packages("lubridate")
-install.packages("caret")
+#install.packages("lubridate")
+#install.packages("caret")
 library(caret)
 library(lattice)
 trainProportion <- 0.7
@@ -625,12 +625,12 @@ validation <- train_table[-trainIndexes,]
 # La funci?n para hacer el One-Hot-Encoding solo funciona
 # sobre objetos de tipo data.table
 
-install.packages('data.table')
+#install.packages('data.table')
 library(data.table)
 
 training.dt<-data.table(training)
 
-install.packages('mltools')
+#install.packages('mltools')
 library(mltools)
 
 one_hot_encoding.training<-one_hot(training.dt[,c("Avgexp","Age","Income","Inc_per","Active","Cur_add","Ownrent","Selfempl","Exp_Inc","Depndt","Major")],dropCols=TRUE)
@@ -643,7 +643,7 @@ one_hot_encoding.test<-one_hot(test.dt[,c("Avgexp","Age","Income","Inc_per","Act
 
 # Adem?s, la funci?n xgb funciona sobre objetos de tipo xgb.DMatrix
 
-install.packages('xgboost')
+#install.packages('xgboost')
 library(xgboost)
 
 one_hot_encoding.training.DMatrix<-xgb.DMatrix(
