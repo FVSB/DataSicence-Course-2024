@@ -685,7 +685,7 @@ predictTestAux.xgb <- prediction(predictTest.xgb[,1], test_table$default)
 auc_ROC<-performance(predictTestAux.xgb, "auc")
 auc_ROC@y.values[[1]]
 
-# 0.796999 > 0.6481545 (Regresion continua arrojando mejores resultados)
-# Aun probando con varios valores con cada uno de los hiperparametros uno de los
-# mejores resultados fue de  0.6481545
+# 0.796999 > 0.6481545 (La regresion continua arrojando mejores resultados)
+# Probando con combinaciones de los  hiperparametros uno de los
+# mejores resultados fue de 0.6481545
 
